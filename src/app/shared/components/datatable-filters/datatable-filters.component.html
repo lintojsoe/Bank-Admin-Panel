@@ -1,0 +1,26 @@
+<ng-container *ngIf="type == filterTypes.Text">
+  <mat-form-field class="flex-auto gt-xs:pr-3">
+    <input matInput type="text" [formControl]="formcontrol">
+  </mat-form-field>
+</ng-container>
+<ng-container *ngIf="type == filterTypes.Select">
+  <mat-form-field>
+    <mat-select [formControl]="formcontrol">
+      <mat-option *ngFor="let option of options" [value]="option.id">
+        {{option?.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</ng-container>
+<ng-container *ngIf="type == filterTypes.Date">
+  <mat-form-field>
+    <input (focus)="picker.open()" matInput [matDatepicker]="picker" [formControl]="formcontrol">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</ng-container>
+<ng-container *ngIf="type == filterTypes.Number">
+  <mat-form-field class="flex-auto gt-xs:pr-3">
+    <input matInput type="number" [formControl]="formcontrol">
+  </mat-form-field>
+</ng-container>

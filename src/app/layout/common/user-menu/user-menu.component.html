@@ -1,0 +1,23 @@
+<button mat-icon-button [matMenuTriggerFor]="userActions">
+  <span class="relative">
+    <mat-icon class="mt-2">account_circle</mat-icon>
+  </span>
+</button>
+
+<mat-menu [xPosition]="'before'" #userActions="matMenu">
+  <button mat-menu-item>
+    <div class="flex flex-col leading-none">
+      <div class="text-lg font-bold flex-row flex flex-0 items-center">
+        <mat-icon>account_circle</mat-icon>
+        <div>
+          admin@fund.com
+        </div>
+      </div>
+    </div>
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span>{{ "Sign out"}}</span>
+  </button>
+</mat-menu>

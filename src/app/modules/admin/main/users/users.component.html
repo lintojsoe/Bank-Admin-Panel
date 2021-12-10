@@ -1,0 +1,180 @@
+<app-breadcrumb [breadcrumbs]="breadcrumbs"></app-breadcrumb>
+<app-fixed-container >
+    <div class="text-2xl flex flex-row flex-auto gap-x-2 items-center font-bold tracking-tight  p-4 pl-6">
+        <div class="flex-1 min-w-0 flex gap-3 items-center">
+            <mat-icon class="text-4xl mb-2">people</mat-icon>
+            <div class="text-3xl font-bold tracking-tight truncate"> {{'Users'}} </div>
+        </div>
+        <div class="flex flex-row flex-initial gap-2">
+            <app-clear-filter [form]="form"></app-clear-filter>
+            <a routerLink="./create" class="w-full primary-bg-color rounded-md" mat-flat-button>
+                <mat-icon>add</mat-icon>
+            </a>
+        </div>
+    </div>
+    <hr class="border-b m-0 ">
+    <div class="flex flex-col flex-initial overflow-hidden">
+        <div class="overflow-x-auto sm:overflow-y-auto" cdkScrollable>
+            <table class="w-full min-w-320 md:min-w-0 table-fixed overflow-auto" mat-table matSort
+                [dataSource]="userData" [trackBy]="trackByFn">
+
+                <ng-container matColumnDef="profile_photo">
+                    <th mat-header-cell *matHeaderCellDef disableClear></th>
+                    <td class="pr-8 truncate" mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element?.profile_photo;else noProfile">
+                            <img class="w-16 p-1" [src]="element?.profile_photo">
+                        </ng-container>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="first_name">
+                    <th mat-header-cell *matHeaderCellDef disableClear>
+                        <div class="flex flex-col flex-auto pt-3">
+                            <div class="font-bold">
+                                {{'First Name' }}
+                            </div>
+                            <div class="flex-auto">
+                                <app-datatable-filters [formcontrol]="form.get('first_name_like')"
+                                    [type]="filterType.Text">
+                                </app-datatable-filters>
+                            </div>
+                        </div>
+                    </th>
+                    <td class="pr-8 truncate" mat-cell *matCellDef="let element">
+                        {{element?.first_name}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="last_name">
+                    <th mat-header-cell *matHeaderCellDef disableClear>
+                        <div class="flex flex-col flex-auto pt-3">
+                            <div class="font-bold">
+                                {{'Last Name' }}
+                            </div>
+                            <div class="flex-auto">
+                                <app-datatable-filters [formcontrol]="form.get('last_name_like')"
+                                    [type]="filterType.Text">
+                                </app-datatable-filters>
+                            </div>
+                        </div>
+                    </th>
+                    <td class="pr-8 truncate" mat-cell *matCellDef="let element">
+                        {{element?.last_name}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef disableClear>
+                        <div class="flex flex-col flex-auto pt-3">
+                            <div class="font-bold">
+                                {{'Email' }}
+                            </div>
+                            <div class="flex-auto">
+                                <app-datatable-filters [formcontrol]="form.get('email_like')" [type]="filterType.Text">
+                                </app-datatable-filters>
+                            </div>
+                        </div>
+                    </th>
+                    <td class="pr-4" mat-cell *matCellDef="let element">
+                        {{element?.email}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="personal_id">
+                    <th mat-header-cell *matHeaderCellDef disableClear>
+                        <div class="flex flex-col flex-auto pt-3">
+                            <div class="font-bold">
+                                {{'Personal ID' }}
+                            </div>
+                            <div class="flex-auto">
+                                <app-datatable-filters [formcontrol]="form.get('personal_id_like')"
+                                    [type]="filterType.Text">
+                                </app-datatable-filters>
+                            </div>
+                        </div>
+                    </th>
+                    <td class="pr-4" mat-cell *matCellDef="let element">
+                        {{element?.personal_id}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="mobile_number">
+                    <th mat-header-cell *matHeaderCellDef disableClear>
+                        <div class="flex flex-col flex-auto pt-3">
+                            <div class="font-bold">
+                                {{'Mobile' }}
+                            </div>
+                            <div class="flex-auto">
+                                <app-datatable-filters [formcontrol]="form.get('mobile_number_like')"
+                                    [type]="filterType.Text">
+                                </app-datatable-filters>
+                            </div>
+                        </div>
+                    </th>
+                    <td class="pr-4" mat-cell *matCellDef="let element">
+                        {{element?.mobile_prefix}} {{element?.mobile_number}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th class="dark:bg-black dark:bg-opacity-5 border-right-radius" style="text-align: end !important;"
+                        mat-header-cell *matHeaderCellDef disableClear>
+                        <div class="font-bold">
+                            {{'Actions' }}
+                        </div>
+                    </th>
+                    <td class="pr-4 action-header" mat-cell *matCellDef="let element">
+                        <div class="flex flex-row flex-auto overflow-hidden action-body justify-end">
+                            <div class="flex flex-row action-btn-container" fxFlex="0 0 auto">
+                                <button [routerLink]="'view/'+element.id"
+                                    class="action-btn px-4 flex flex-row flex-auto items-center primary-bg-color rounded-l-md rounded-r-none"
+                                    style="width: auto !important;" mat-icon-button fxLayoutGap="1em">
+                                    <mat-icon class="m-1 text-white">remove_red_eye
+                                    </mat-icon>
+                                    <span class="text-white">{{'View' }}</span>
+                                </button>
+                                <button
+                                    class="action-btn border border-solid action-btn-border rounded-r-md rounded-l-none"
+                                    mat-icon-button [matMenuTriggerFor]="userActions">
+                                    <mat-icon class="text-black">keyboard_arrow_down
+                                    </mat-icon>
+                                </button>
+                            </div>
+                            <mat-menu [xPosition]="'before'" #userActions="matMenu">
+                                <button mat-menu-item [routerLink]="'update/'+element.id">
+                                    <div class="flex flex-row flex-initial items-center">
+                                        <mat-icon>edit_note</mat-icon>
+                                        <strong>{{'Update' }}</strong>
+                                    </div>
+                                </button>
+                                <mat-divider></mat-divider>
+                                <button mat-menu-item (click)="deleteUser(element)">
+                                    <div class="flex flex-row flex-initial items-center">
+                                        <mat-icon>delete</mat-icon>
+                                        <strong>{{'Delete' }}</strong>
+                                    </div>
+                                </button>
+                            </mat-menu>
+                        </div>
+                    </td>
+                </ng-container>
+                <tr class="shadow" mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+                <tr class="mat-row" *matNoDataRow [ngClass]="isLoading? 'hidden' : ''">
+                    <td class="mat-cell border-b-0">{{'No data found'}}</td>
+                </tr>
+                <tr class="h-18 hover:bg-hover" mat-row *matRowDef="let element; columns: columns;">
+                </tr>
+            </table>
+        </div>
+        <div class="w-full flex justify-end">
+            <mat-paginator #userPaginator class="m-2" (page)="onPaginationSelect($event)" [length]="page?.length"
+                [pageSize]="page?.pageSize" [pageSizeOptions]="page?.pageSizeOptions" [pageIndex]="page?.pageIndex">
+            </mat-paginator>
+        </div>
+    </div>
+</app-fixed-container>
+
+
+<ng-template #noProfile>
+    <img class="w-15" src="../../../../../assets/images/user-placeholder.png">
+</ng-template>

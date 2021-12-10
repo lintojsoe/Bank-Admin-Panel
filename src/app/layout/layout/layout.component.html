@@ -1,0 +1,28 @@
+<!-- Wrapper -->
+<div class="flex flex-col flex-auto w-full min-w-0">
+
+  <!-- Header -->
+  <div class="relative flex flex-0 items-center w-full h-16 px-4 md:px-6 z-49 shadow bg-white">
+    <div class="w-22">
+      <img src="../../../assets/favicon/fav-icon.png">
+    </div>
+    <!-- Components -->
+    <div class="flex items-center pl-2 ml-auto space-x-2">
+      <strong class="font-bold text-lg">{{'admin' | uppercase}}</strong>
+      <app-user-menu></app-user-menu>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="flex flex-col flex-auto">
+    <!-- *ngIf="true" hack is required here for router-outlet to work correctly.
+             Otherwise, layout changes won't be registered and the view won't be updated! -->
+    <router-outlet *ngIf="true"></router-outlet>
+  </div>
+
+  <!-- Footer -->
+  <div class="relative flex flex-0 items-center justify-center bg-white w-full h-14 px-4 md:px-6 z-49 border-t">
+    <span class="font-medium text-secondary">Bank Admin &copy; {{currentYear}}</span>
+  </div>
+
+</div>

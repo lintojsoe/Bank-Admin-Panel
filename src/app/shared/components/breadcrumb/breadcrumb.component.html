@@ -1,0 +1,18 @@
+<div class="flex flex-col flex-auto justify-start shadow h-10 bg-gray-200 ">
+    <div class="flex flex-row lg:px-16 p-3 flex-auto min-w-0 lg:justify-center overflow-auto">
+        <div class="flex flex-row flex-auto lg:flex-90">
+            <div class="flex flex-row flex-initial">
+                <div class="flex flex-wrap items-center font-medium"
+                    *ngFor="let breadcrumb of breadcrumbs;let last =last">
+                    <div>
+                        <a [ngClass]="!breadcrumb?.disabled ? 'cursor-pointer text-blue-500' : ''" (click)="handleClick(breadcrumb)"
+                            class="whitespace-nowrap text-primary-500">{{breadcrumb?.name}}</a>
+                    </div>
+                    <div class="flex items-center mx-2 whitespace-nowrap" *ngIf="!last">
+                        <i class="fas fa-chevron-right text-secondary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

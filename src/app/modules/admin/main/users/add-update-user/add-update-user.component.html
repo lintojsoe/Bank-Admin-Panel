@@ -1,0 +1,252 @@
+<app-breadcrumb [breadcrumbs]="breadcrumbs"></app-breadcrumb>
+<app-fixed-container>
+    <form class="flex flex-col flex-auto" [formGroup]="form">
+        <div class="text-2xl flex flex-row flex-initial gap-x-2 items-center font-bold tracking-tight  p-4 pl-6">
+            <button mat-icon-button type="button" (click)="location.back()">
+                <mat-icon> arrow_back </mat-icon>
+            </button>
+            <span *ngIf="!id">{{'Create New User' }}</span>
+            <span *ngIf="id">{{userDetails?.first_name}} {{userDetails?.last_name}}</span>
+        </div>
+        <hr class="border-b m-0">
+        <div class="flex sm:flex-row flex-col p-4 gap-2">
+            <div class="flex flex-col gap-y-4 flex-auto">
+                <div class="flex flex-col bg-card shadow p-4">
+                    <div class="text-xl font-bold tracking-tight py-4 ">
+                        {{'Basic Info' }}
+                    </div>
+                    <hr class="border-b m-0 ">
+                    <div class="flex flex-col flex-auto">
+                        <div class="flex flex-col sm:flex-row flex-auto gap-x-4 gap-y-4 pt-4">
+                            <div class="flex flex-initial flex-col items-center">
+                                <div
+                                    class="relative flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-1 ring-white">
+                                    <ng-container *ngIf="!profilePic">
+                                        <div class="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+                                        <div class="absolute inset-0 flex items-center justify-center z-20">
+                                            <div>
+                                                <input (change)="uploadFile($event.target.files)" id="profile_pic"
+                                                    class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                                                    type="file" [multiple]="false" [accept]="'image/jpeg, image/png'">
+                                                <label
+                                                    class="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-hover"
+                                                    for="profile_pic" matRipple>
+                                                    <mat-icon class="text-white">camera_alt</mat-icon>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                    <img class="object-cover w-full h-full" *ngIf="profilePic" [src]="profilePic">
+                                    <div *ngIf="!profilePic"
+                                        class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                        P
+                                    </div>
+
+                                </div>
+                                <div *ngIf="profilePic">
+                                    <button class="rounded-lg  mt-3 bg-gray-200" mat-flat-button
+                                        (click)="profilePic = null">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex-auto grid grid-cols-3 gap-2">
+                                <div class="col-span-3 sm:col-span-1 flex flex-col  ">
+                                    <mat-form-field class="flex-auto">
+                                        <mat-label>
+                                            {{'First Name' }}
+                                            <span class="text-red-600">*</span>
+                                        </mat-label>
+                                        <input type="text" matInput formControlName="first_name">
+                                        <mat-error *ngIf="form.get('first_name').hasError('required')">
+                                            {{'First Name is required'}}
+                                        </mat-error>
+                                        <mat-error *ngIf="form.get('first_name').hasError('maxlength')">
+                                            {{'First Name must be less than 60 characters'}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-span-3 sm:col-span-1 flex flex-col  ">
+                                    <mat-form-field class="flex-auto">
+                                        <mat-label>
+                                            {{'Last Name' }}
+                                            <span class="text-red-600">*</span>
+                                        </mat-label>
+                                        <input type="text" matInput formControlName="last_name">
+                                        <mat-error *ngIf="form.get('last_name').hasError('required')">
+                                            {{'Last Name is required'}}
+                                        </mat-error>
+                                        <mat-error *ngIf="form.get('last_name').hasError('maxlength')">
+                                            {{'Last Name must be less than 60 characters'}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-span-3 sm:col-span-1 flex flex-col ">
+                                    <mat-form-field class="flex-auto">
+                                        <mat-label>
+                                            {{'Email' }}
+                                            <span class="text-red-600">*</span>
+                                        </mat-label>
+                                        <input type="text" matInput formControlName="email">
+                                        <mat-error *ngIf="form.get('email').hasError('required')">
+                                            {{'Email is required'}}
+                                        </mat-error>
+                                        <mat-error *ngIf="form.get('email').hasError('email')">
+                                            {{'Invalid email'}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-span-3 sm:col-span-1 flex flex-col ">
+                                    <div class="flex flex-row gap-1 flex-auto">
+                                        <mat-form-field class="w-16 md:w-20">
+                                            <mat-select formControlName="mobile_prefix">
+                                                <mat-select-trigger>
+                                                    {{form.get('mobile_prefix').value}}
+                                                </mat-select-trigger>
+                                                <mat-option
+                                                    *ngFor="let prefix of mobile_prefix$ | async; trackBy: trackByFn"
+                                                    [value]="prefix.dialCode">
+                                                    <span class="flex items-center">
+                                                        <span class="w-6 h-4 overflow-hidden">
+                                                            <div
+                                                                [innerHtml]="domSanitizer.bypassSecurityTrustHtml(prefix?.flag)">
+                                                            </div>
+                                                        </span>
+                                                        <span class="mx-2">{{prefix?.country}}</span>
+                                                        <span class="font-medium">{{prefix.dialCode}}</span>
+                                                    </span>
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-form-field class="flex-auto">
+                                            <mat-label>
+                                                {{'Mobile Number' }}
+                                            </mat-label>
+                                            <input matInput type="number" formControlName="mobile_number">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-span-3 sm:col-span-1 flex flex-col ">
+                                    <mat-form-field class="flex-auto">
+                                        <mat-label>
+                                            {{'Personal ID' }}
+                                            <span class="text-red-600">*</span>
+                                        </mat-label>
+                                        <input type="text" matInput formControlName="personal_id">
+                                        <mat-error *ngIf="form.get('personal_id').hasError('required')">
+                                            {{'Personal ID is required'}}
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="form.get('personal_id').hasError('maxlength') || form.get('personal_id').hasError('minlength')">
+                                            {{'Personal ID must have 11 characters'}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-span-3 sm:col-span-1 flex flex-col ">
+                                    <mat-form-field class="flex-auto">
+                                        <mat-label>{{'Gender'}}
+                                            <span class="text-red-600">*</span>
+                                        </mat-label>
+                                        <mat-select formControlName="gender">
+                                            <mat-option [value]="gender?.id" *ngFor="let gender of genderList">
+                                                {{gender?.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="form.get('gender').hasError('required')">
+                                            {{'Gender is required'}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col bg-card shadow p-4">
+                    <div class="text-xl font-bold tracking-tight  pb-4 ">
+                        {{'Account' }}
+                    </div>
+                    <hr class="border-b m-0 ">
+                    <div class="flex flex-col grid">
+                        <div class="flex-auto grid grid-cols-1 md:grid-cols-4 gap-2 mt-6">
+                            <div class="col-span-3 sm:col-span-2 flex flex-col  ">
+                                <ng-container formArrayName="account"
+                                    *ngFor="let accountFormGroup of form.get('account')['controls'];let i = index">
+                                    <div class="flex flex-row flex-initial gap-2 items-baseline">
+                                        <mat-form-field class="flex-auto">
+                                            <mat-label>{{'Account'}}
+                                                <span class="text-red-600">*</span>
+                                            </mat-label>
+                                            <input type="text" matInput [formControl]="accountFormGroup.get('account')">
+                                            <mat-error *ngIf="accountFormGroup.get('account').hasError('required')">
+                                                {{'Account is required'}}
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <button *ngIf="accountFormArray?.length > 1" mat-icon-button
+                                            (click)="removeAccountFormGroup(i)">
+                                            <span class="relative">
+                                                <mat-icon class="mt-2 text-secondary">delete
+                                                </mat-icon>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </ng-container>
+                                <div class="group inline-flex items-center rounded cursor-pointer w-40 text-secondary"
+                                    (click)="addAccountFormGroup()">
+                                    <mat-icon>add</mat-icon>
+                                    <span class="ml-2 font-medium  group-hover:underline">{{'Add Account'}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col bg-card shadow p-4">
+                    <div class="text-xl font-bold tracking-tight  pb-4 ">
+                        {{'Address' }}
+                    </div>
+                    <hr class="border-b m-0 ">
+                    <div class="flex flex-col grid" formGroupName="address">
+                        <div class="flex-auto grid grid-cols-1 md:grid-cols-4 gap-2 mt-6">
+                            <div class="col-span-3 sm:col-span-1 flex flex-col  ">
+                                <mat-form-field class="flex-auto">
+                                    <mat-label>{{'Country' }}
+                                    </mat-label>
+                                    <input type="text" matInput formControlName="country">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-3 sm:col-span-1 flex flex-col  ">
+                                <mat-form-field class="flex-auto">
+                                    <mat-label>{{'City' }}
+                                    </mat-label>
+                                    <input type="text" matInput formControlName="city">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-3 sm:col-span-1 flex flex-col ">
+                                <mat-form-field class="flex-auto">
+                                    <mat-label>{{'Street' }}
+                                    </mat-label>
+                                    <input type="text" matInput formControlName="street">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-span-3 sm:col-span-1 flex flex-col  ">
+                                <mat-form-field class="flex-auto">
+                                    <mat-label>{{'Zip Code' }}
+                                    </mat-label>
+                                    <input type="text" matInput formControlName="zip_code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-row flex-initial p-4 justify-end">
+            <button type="submit" (click)="onSubmit()" class="rounded-lg min-h-0 h-9 primary-bg-color" mat-flat-button>
+                <mat-icon class="text-white">save</mat-icon>
+                <span>
+                    {{'Save' }}
+                </span>
+            </button>
+        </div>
+    </form>
+</app-fixed-container>
